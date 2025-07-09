@@ -1,8 +1,14 @@
 def winCheck(checkBoard):
+   """
+   Checking board in diagonal direction
+   """
    if checkBoard[0][0] == checkBoard[1][1] == checkBoard[2][2] and checkBoard[2][2] != "  ":
     return True , checkBoard[0][0]
    elif checkBoard[0][2] == checkBoard[1][1]  == checkBoard[2][0] and checkBoard[2][0] != "  ":
          return True , checkBoard[0][2]
+   """
+   Checking board in other possible directions
+   """
    for i in range(3):
       if checkBoard[i][0] == checkBoard[i][1] == checkBoard[i][2] and checkBoard[i][2] != "  ":
          return True , checkBoard[i][0]
@@ -11,11 +17,21 @@ def winCheck(checkBoard):
    else:
       return False , None
 def printTable(checkBoard):
+   """
+   print the board
+   """
    for row in range(3):
        print("|" , end = "")
        for block in range(3):
          print(A[row][block] , end = "|")
        print()
+def resultPrint(result , win):
+   if result:
+       if win == "⭕": print("\nYou win🥳🎈!")
+       else: print("\ncomputer win🫨➰!")
+       return True
+   return False
+   
 import random
 A = [["  " , "  " , "  "],
     ["  " , "  " , "  "] ,
@@ -25,11 +41,8 @@ while choices:
     print()
     printTable(A)
     result , win = winCheck(A)
-    if result:
-       if win == "⭕": print("\nYou win🥳🎈!")
-       else: print("\ncomputer win🫨➰!")
+    if resultPrint(result , win):
        break
-    
     num = [choices.index(x) for x in choices]
     while True:
         for x in choices:
@@ -41,9 +54,7 @@ while choices:
     print()
     printTable(A)
     result , win = winCheck(A)
-    if result:
-       if win == "⭕": print("\nYou win🥳🎈!")
-       else: print("\ncomputer win🫨➰!")
+    if resultPrint(result , win):
        break
     choices.remove(choices[int(user)])
     print("\nComputer turn 💻🖥️\n")
