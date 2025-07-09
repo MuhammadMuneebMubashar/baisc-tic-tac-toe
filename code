@@ -1,31 +1,35 @@
 def winCheck(checkBoard):
-   if checkBoard[0][0] == checkBoard[1][1] == checkBoard[2][2] and checkBoard[2][2] is not None:
+   if checkBoard[0][0] == checkBoard[1][1] == checkBoard[2][2] and checkBoard[2][2] != "  ":
     return True , checkBoard[0][0]
-   elif checkBoard[0][2] == checkBoard[1][1]  == checkBoard[2][0] and checkBoard[2][0] is not None:
+   elif checkBoard[0][2] == checkBoard[1][1]  == checkBoard[2][0] and checkBoard[2][0] != "  ":
          return True , checkBoard[0][2]
    for i in range(3):
-      if checkBoard[i][0] == checkBoard[i][1] == checkBoard[i][2] and checkBoard[i][2] is not None:
+      if checkBoard[i][0] == checkBoard[i][1] == checkBoard[i][2] and checkBoard[i][2] != "  ":
          return True , checkBoard[i][0]
-      elif checkBoard[0][i] == checkBoard[1][i] == checkBoard[2][i] and checkBoard[2][i] is not None:
+      elif checkBoard[0][i] == checkBoard[1][i] == checkBoard[2][i] and checkBoard[2][i] != "  ":
          return True , checkBoard[0][i]
    else:
       return False , None
-import random
-A = [[None , None , None],
-    [None , None , None] ,
-    [None , None , None]]
-choices = [(0 , 0) , (0 , 1) , (0 , 2) , (1 , 0) , (1 , 1) , (1 , 2) , (2 , 0) , (2 , 1) , (2 , 2)]
-while choices:
-    result , win = winCheck(A)
-    if result:
-       if win == "O": print("\nYou win🥳🎈!")
-       else: print("\ncomputer win❌❌!")
-       break
-    for row in range(3):
+def printTable(checkBoard):
+   for row in range(3):
        print("|" , end = "")
        for block in range(3):
          print(A[row][block] , end = "|")
        print()
+import random
+A = [["  " , "  " , "  "],
+    ["  " , "  " , "  "] ,
+    ["  " , "  " , "  "]]
+choices = [(0 , 0) , (0 , 1) , (0 , 2) , (1 , 0) , (1 , 1) , (1 , 2) , (2 , 0) , (2 , 1) , (2 , 2)]
+while choices:
+    print()
+    printTable(A)
+    result , win = winCheck(A)
+    if result:
+       if win == "⭕": print("\nYou win🥳🎈!")
+       else: print("\ncomputer win🫨➰!")
+       break
+    
     num = [choices.index(x) for x in choices]
     while True:
         for x in choices:
@@ -33,15 +37,18 @@ while choices:
         user = input(f"\n:")
         if int(user) in num:
           break
-    A[choices[int(user)][0]][choices[int(user)][1]] = "O"
+    A[choices[int(user)][0]][choices[int(user)][1]] = "⭕"
+    print()
+    printTable(A)
     result , win = winCheck(A)
     if result:
-       if win == "O": print("\nYou win🥳🎈!")
-       else: print("\ncomputer win❌❌!")
+       if win == "⭕": print("\nYou win🥳🎈!")
+       else: print("\ncomputer win🫨➰!")
        break
     choices.remove(choices[int(user)])
+    print("\nComputer turn 💻🖥️\n")
     comp = random.choice(choices)
-    A[comp[0]][comp[1]] = "X"
+    A[comp[0]][comp[1]] = "❌"
     choices.remove(comp)
 else:
    print("Match draw ")
