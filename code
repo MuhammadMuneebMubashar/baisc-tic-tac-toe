@@ -21,9 +21,11 @@ while choices:
        if win == "O": print("\nYou win🥳🎈!")
        else: print("\ncomputer win❌❌!")
        break
-    print(A[0])
-    print(A[1])
-    print(A[2])
+    for row in range(3):
+       print("|" , end = "")
+       for block in range(3):
+         print(A[row][block] , end = "|")
+       print()
     num = [choices.index(x) for x in choices]
     while True:
         for x in choices:
