@@ -23,7 +23,7 @@ def printTable(checkBoard):
    for row in range(3):
        print("|" , end = "")
        for block in range(3):
-         print(A[row][block] , end = "|")
+         print(checkBoard[row][block] , end = "|")
        print()
 def resultPrint(result , win):
    if result:
@@ -31,38 +31,40 @@ def resultPrint(result , win):
        else: print("\ncomputer win🫨➰!")
        return True
    return False
-   
-import random
-A = [["  " , "  " , "  "],
-    ["  " , "  " , "  "] ,
-    ["  " , "  " , "  "]]
-choices = [(0 , 0) , (0 , 1) , (0 , 2) , (1 , 0) , (1 , 1) , (1 , 2) , (2 , 0) , (2 , 1) , (2 , 2)]
-while choices:
-    print()
-    printTable(A)
-    result , win = winCheck(A)
-    if resultPrint(result , win):
-       break
-    num = [choices.index(x) for x in choices]
-    while True:
-        for x in choices:
-           print(f"{choices.index(x)} for {x}") 
-        user = input(f"\n:")
-        if int(user) in num:
-          break
-    A[choices[int(user)][0]][choices[int(user)][1]] = "⭕"
-    print()
-    printTable(A)
-    result , win = winCheck(A)
-    if resultPrint(result , win):
-       break
-    choices.remove(choices[int(user)])
-    print("\nComputer turn 💻🖥️\n")
-    comp = random.choice(choices)
-    A[comp[0]][comp[1]] = "❌"
-    choices.remove(comp)
-else:
-   print("Match draw ")
+def game():
+   import random
+   A = [["  " , "  " , "  "],
+      ["  " , "  " , "  "] ,
+      ["  " , "  " , "  "]]
+   choices = [(0 , 0) , (0 , 1) , (0 , 2) , (1 , 0) , (1 , 1) , (1 , 2) , (2 , 0) , (2 , 1) , (2 , 2)]
+   while choices:
+      print()
+      printTable(A)
+      result , win = winCheck(A)
+      if resultPrint(result , win):
+         break
+      num = [choices.index(x) for x in choices]
+      while True:
+         for x in choices:
+            print(f"{choices.index(x)} for {x}") 
+         user = input(f"\n:")
+         if int(user) in num:
+            break
+      A[choices[int(user)][0]][choices[int(user)][1]] = "⭕"
+      print()
+      printTable(A)
+      result , win = winCheck(A)
+      if resultPrint(result , win):
+         break
+      choices.remove(choices[int(user)])
+      print("\nComputer turn 💻🖥️\n")
+      comp = random.choice(choices)
+      A[comp[0]][comp[1]] = "❌"
+      choices.remove(comp)
+   else:
+      print("Match draw ")
+game()
+
     
     
     
