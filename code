@@ -1,79 +1,138 @@
-def winCheck(checkBoard):
-   """
-   Checking board in diagonal direction
-   """
-   if checkBoard[0][0] == checkBoard[1][1] == checkBoard[2][2] and checkBoard[2][2] != "  ":
-    return True , checkBoard[0][0]
-   elif checkBoard[0][2] == checkBoard[1][1]  == checkBoard[2][0] and checkBoard[2][0] != "  ":
-         return True , checkBoard[0][2]
-   """
-   Checking board in other possible directions
-   """
-   for i in range(3):
-      if checkBoard[i][0] == checkBoard[i][1] == checkBoard[i][2] and checkBoard[i][2] != "  ":
-         return True , checkBoard[i][0]
-      elif checkBoard[0][i] == checkBoard[1][i] == checkBoard[2][i] and checkBoard[2][i] != "  ":
-         return True , checkBoard[0][i]
-   else:
-      return False , None
-def printTable(checkBoard):
-   """
-   print the board
-   """
-   for row in range(3):
-       print("|" , end = "")
-       for block in range(3):
-         print(checkBoard[row][block] , end = "|")
-       print()
-def resultPrint(result , win):
-   if result:
-       if win == "⭕": print("\nYou win🥳🎈!")
-       else: print("\ncomputer win🫨➰!")
-       return True
-   return False
+import random
+
+def user_input(statement, ranges=(0, 1)):
+  while True:
+    try:
+      x = int(input(f"{statement} : ").strip())
+      if ranges[0] <= x <= ranges[1]:
+        return x
+      else:
+        print("Please consider range ⚠️")
+    except:
+      print("Please enter numbers only ⚠️ !")
+
+def line_check(lst):
+  return "  " not in lst and len(set(lst)) == 1
+
+def winCheck(board):
+  length = len(board[0])
+  for i in range(length):
+    column = [board[j][i] for j in range(length)]
+    if line_check(board[i]):
+      return True, board[i][0]
+    elif line_check(column):
+      return True, column[0]
+  diagonal_left = [board[j][j] for j in range(length)]
+  if line_check(diagonal_left):
+    return True, diagonal_left[0]
+  diagonal_right = [board[j][length - j - 1] for j in range(length)]
+  if line_check(diagonal_right):
+    return True, diagonal_right[0]
+  return False, None
+
+def printTable(board):
+  length = len(board[0])
+  print()
+  for row in range(length):
+    print("|", end="")
+    print("|".join(elem for elem in board[row]), end="")
+    print("|", end="\n")
+  print()
+
+def resultPrint(result, win, mode):
+  if mode == "computer":
+    player = "You , Computer"
+    emojis = "🎈🥳,🫨⚠️"
+  else:
+    player = "Player 1 , Player2"
+    emojis = "🎈🥳"
+  player = player.split(" , ")
+  if result:
+    if win == "⭕":
+      print(f"\n{player[0]} win{emojis[0]}{emojis[1]}!")
+    else:
+      print(f"\n{player[1]} win{emojis[-1]}{emojis[-2]}!")
+
+def board_creater(length):
+  board = []
+  for x in range(length):
+    line = ["  " for y in range(length)]
+    board.append(line)
+  return board
+
+def board_level(board):
+  choices = []
+  length = len(board[0])
+  for x in range(length):
+    for y in range(length):
+      choices.append((x, y))
+  return choices
+
+def user_turn(choices):
+  while True:
+    for x, y in enumerate(choices):
+      print(f"{x} for {y}")
+    try:
+      user = int(input(f"\n: "))
+      if user < len(choices):
+        return choices[user]
+      else:
+        print("Please consider input range !")
+    except:
+      print("Please enter numbers only : ")
+
+def results(board, mode):
+  printTable(board)
+  result, win = winCheck(board)
+  resultPrint(result, win, mode)
+  if result:
+    return True
+  else:
+    return False
+
+def computer(boardChoice):
+  board = board_creater(boardChoice)
+  choices = board_level(board)
+  while True:
+    if results(board, mode="computer"):
+      break
+    user = user_turn(choices)
+    board[user[0]][user[1]] = "⭕"
+    if results(board, mode="computer"):
+      break
+    choices.remove(user)
+    print("\nComputer turn 🖥️\n")
+    comp = random.choice(choices)
+    board[comp[0]][comp[1]] = "❌"
+    choices.remove(comp)
+  else:
+    print("Match draw ")
+
+def P1_VS_P2(boardChoice):
+  board = board_creater(boardChoice)
+  choices = board_level(board)
+  while choices:
+    if results(board, mode="P1_VS_P2"):
+      break
+    print("\nUser 1 Turn  ⭕\n")
+    user1 = user_turn(choices)
+    board[user1[0]][user1[1]] = "⭕"
+    if results(board, mode="P1_VS_P2"):
+      break
+    choices.remove(user1)
+    print("\nUser 2 Turn  ❌\n")
+    user2 = user_turn(choices)
+    board[user2[0]][user2[1]] = "❌"
+    choices.remove(user2)
+  else:
+    print("Match draw ")
+
 def game():
-   import random
-   A = [["  " , "  " , "  "],
-      ["  " , "  " , "  "] ,
-      ["  " , "  " , "  "]]
-   choices = [(0 , 0) , (0 , 1) , (0 , 2) , (1 , 0) , (1 , 1) , (1 , 2) , (2 , 0) , (2 , 1) , (2 , 2)]
-   while choices:
-      print()
-      printTable(A)
-      result , win = winCheck(A)
-      if resultPrint(result , win):
-         break
-      num = [choices.index(x) for x in choices]
-      while True:
-         for x in choices:
-            print(f"{choices.index(x)} for {x}") 
-         user = input(f"\n:")
-         if int(user) in num:
-            break
-      A[choices[int(user)][0]][choices[int(user)][1]] = "⭕"
-      print()
-      printTable(A)
-      result , win = winCheck(A)
-      if resultPrint(result , win):
-         break
-      choices.remove(choices[int(user)])
-      print("\nComputer turn 💻🖥️\n")
-      comp = random.choice(choices)
-      A[comp[0]][comp[1]] = "❌"
-      choices.remove(comp)
-   else:
-      print("Match draw ")
+  boardChoice = user_input("Please enter how many rows do you want (min : 3)", ranges=(3, 30))
+  mode = user_input("1. Play with computer\n2. P1 VS P2\nEnter your choice", ranges=(1, 2))
+  if mode == 1:
+    computer(boardChoice)
+  else:
+    P1_VS_P2(boardChoice)
+
 game()
-
-    
-    
-    
-
-
-
-    
-
-
-
-
-
